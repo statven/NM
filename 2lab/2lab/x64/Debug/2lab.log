@@ -1,2 +1,2 @@
-﻿  2lab.cpp
-  2lab.vcxproj -> D:\programming\Численные методы Вариант 9\2lab\x64\Debug\2lab.exe
+﻿2lab.obj : error LNK2019: ссылка на неразрешенный внешний символ "void __cdecl solve(double,double,double,bool,double (__cdecl*)(double,double),double (__cdecl*)(double,double),double (__cdecl*)(double,double),double (__cdecl*)(double,double),double (__cdecl*)(double,double),double (__cdecl*)(double,double),double,double,int)" (?solve@@YAXNNN_NP6ANNN@Z11111NNH@Z) в функции main.
+D:\programming\1chis\2lab\x64\Debug\2lab.exe : fatal error LNK1120: неразрешенных внешних элементов: 1
