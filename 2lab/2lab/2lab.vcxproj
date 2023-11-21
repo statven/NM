@@ -128,6 +128,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="2lab.cpp" />
+    <ClCompile Include="newton_method.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="newton_method.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
