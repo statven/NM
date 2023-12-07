@@ -8,8 +8,7 @@ double df1_dx1(double x1, double x2);
 double df1_dx2(double x1, double x2);
 double df2_dx1(double x1, double x2);
 double df2_dx2(double x1, double x2);
-void newtonMethod(double& x1, double& x2, double epsilon1, double epsilon2, int NIT);
+void newtonMethod(double& x1, double& x2, double epsilon1, double epsilon2, int NIT,double M);
 double* methodGauss(double mA[n][n], double cB[n]);
 
 #endif // NEWTON_METHOD_H
-

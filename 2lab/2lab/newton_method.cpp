@@ -3,83 +3,41 @@
 #include <iomanip>
 #include<algorithm>
 #include <math.h>
+
+
 using namespace std;
 double f1(double x1, double x2) {
-    return 1.5 * pow(x1, 3) - pow(x2, 2) - 1;
+	return 1.5 * pow(x1, 3) - pow(x2, 2) - 1;
 }
 
 double f2(double x1, double x2) {
-    return x1 * pow(x2, 3) - x2 - 4;
+	return x1 * pow(x2, 3) - x2 - 4;
 }
 
 double df1_dx1(double x1, double x2) {
-    return 4.5 * pow(x1, 2);
+	return 4.5 * pow(x1, 2);
 }
 
 double df1_dx2(double x1, double x2) {
-    return -2 * x2;
+	return -2 * x2;
 }
 
 double df2_dx1(double x1, double x2) {
-    return pow(x2, 3);
+	return pow(x2, 3);
 }
 
 double df2_dx2(double x1, double x2) {
-    return 3 * pow(x1, 2) * pow(x2, 2) - 1;
+	return 3 * pow(x1, 2) * pow(x2, 2) - 1;
 }
 
-//void newtonMethod(double& x1, double& x2, double epsilon1, double epsilon2, int NIT) {
-//    int k = 1; // Номер итерации
-//
-//    while (true) {
-//        // Вычисление вектора невязки
-//        double F1 = f1(x1, x2);
-//        double F2 = f2(x1, x2);
-//
-//        // Вычисление матрицы Якоби аналитическим способом
-//        double J11 = df1_dx1(x1, x2);
-//        double J12 = df1_dx2(x1, x2);
-//        double J21 = df2_dx1(x1, x2);
-//        double J22 = df2_dx2(x1, x2);
-//
-//        // Решение системы линейных уравнений
-//        double detJ = J11 * J22 - J12 * J21;
-//        double deltaX1 = (J22 * F1 - J12 * F2) / detJ;
-//        double deltaX2 = (-J21 * F1 + J11 * F2) / detJ;
-//
-//        // Уточнение решения
-//        x1 += deltaX1;
-//        x2 += deltaX2;
-//
-//        // Вычисление delta1 и delta2
-//        double delta1 = abs(deltaX1);
-//        double delta2 = abs(deltaX2);
-//
-//        // Вывод текущих значений delta1 и delta2
-//        cout << "Iteration " << k << ": delta1 = " << delta1 << ", delta2 = " << delta2 << endl;
-//
-//        // Проверка критерия завершения итерационного процесса
-//        if (delta1 < epsilon1 && delta2 < epsilon2) {
-//            cout << "Convergence achieved with epsilon1 = " << epsilon1 << " and epsilon2 = " << epsilon2 << endl;
-//            break;
-//        }
-//
-//        // Проверка условия k >= NIT
-//        if (k >= NIT) {
-//            cout << "Iteration limit reached" << endl;
-//            break;
-//        }
-//
-//        k++;
-//    }
-//}
-void newtonMethod(double& x1, double& x2, double epsilon1, double epsilon2, int NIT) {
+
+void newtonMethod(double& x1, double& x2, double epsilon1, double epsilon2, int NIT, double M) {
 
 	int k = 1;
-	
+
 	cout << "k" << setw(12) << "l1" << setw(14) << "l2" << setw(16) << "x1" << setw(14) << "x2" << endl;
 	cout << "------------------------------------------------------------------" << endl;
-
+	
 	double* dXk = new double[n];
 	double dXk1 = 0, dXk2 = 0;
 	double l1 = 1, l2 = 1, l1_2 = 0, l2_2 = 0;
@@ -88,9 +46,21 @@ void newtonMethod(double& x1, double& x2, double epsilon1, double epsilon2, int 
 		while (l1 > epsilon1 || l2 > epsilon2) {
 			double Fx[] = { -f2(x1,x2), -f2(x1,x2) };
 			double Jacobian[n][n] = {
-				{df1_dx1(x1,x2), df1_dx2(x1,x2)},
-				{df2_dx1(x1,x2), df2_dx2(x1,x2)}
+					{df1_dx1(x1,x2), df1_dx2(x1,x2)},
+					{df2_dx1(x1,x2), df2_dx2(x1,x2)}
 			};
+			if (M == NULL) {
+				double Jacobian[n][n] = {
+					{df1_dx1(x1,x2), df1_dx2(x1,x2)},
+					{df2_dx1(x1,x2), df2_dx2(x1,x2)}
+				};
+			}
+			else {
+				double Jacobian[n][n] = {
+					{((f1(x1 + M * x1, x2) - f1(x1, x2)) / (M * x1)), ( (f1(x1, x2 + M * x2) - f1(x1, x2)) / (M * x2))},
+					{((f2(x1 + M * x1, x2) - f2(x1, x2)) / (M * x1)), ((f2(x1, x2 + M * x2) - f2(x1, x2)) / (M * x2))}
+				};
+			}
 			dXk = methodGauss(Jacobian, Fx);
 			dXk1 = dXk[0] + x1;
 			dXk2 = dXk[1] + x2;
