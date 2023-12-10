@@ -7,13 +7,13 @@ double f(double x, double y) {
 }
 
 // Метод Симпсона для вычисления двойного интеграла
-double doubleIntegralSimpson(double a, double b, double c, double d, int n) {
-    double h = (b - a) / n;
-    double k = (d - c) / n;
+double doubleIntegralSimpson(double a, double b, double c, double d, int n,int m) {
+    double h = (b - a) / (2*n);
+    double k = (d - c) / m;
     double sum = 0;
 
     for (int i = 0; i <= n; i++) {
-        for (int j = 0; j <= n; j++) {
+        for (int j = 0; j <= m; j++) {
             double x = a + i * h;
             double y = c + j * k;
             double coeff = 1.0;
@@ -28,7 +28,7 @@ double doubleIntegralSimpson(double a, double b, double c, double d, int n) {
                 coeff *= 2.0;
             }
 
-            if (j == 0 || j == n) {
+            if (j == 0 || j == m) {
                 coeff *= 1.0;
             }
             else if (j % 2 == 1) {

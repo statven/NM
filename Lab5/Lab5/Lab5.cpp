@@ -8,7 +8,7 @@ int main() {
     setlocale(LC_ALL, "RUS");
     double a = 1.0; // Нижний предел интегрирования
     double b = 2.631; // Верхний предел интегрирования
-    int n = 100; // Количество разбиений отрезка
+    int n = 100,m=100; // Количество разбиений отрезка
     double eps1 = pow(10, -4); // Критерий завершения для eps = 10^(-4)
     double eps2 = pow(10, -5); // Критерий завершения для eps = 10^(-5)
 
@@ -28,8 +28,8 @@ int main() {
     } while (abs(result_trapezoidal_2 - result_trapezoidal_1) > 15 * eps2);
 
     cout << "Результат интегрирования методом трапеции: " << result_trapezoidal_1 << endl;
-    n = 100;
-    double result = doubleIntegralSimpson(0, 2, 0, 1, n);
+    n = 10;
+    double result = doubleIntegralSimpson(0, 2, 0, 1, n,m);
     cout << "Результат вычисления двойного интеграла методом Симпсона: " << result << endl;
     
     return 0;
