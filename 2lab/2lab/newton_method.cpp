@@ -49,6 +49,8 @@ void newtonMethod(double& x1, double& x2, double epsilon1, double epsilon2, int 
 					{df1_dx1(x1,x2), df1_dx2(x1,x2)},
 					{df2_dx1(x1,x2), df2_dx2(x1,x2)}
 			};
+			
+		
 			dXk = methodGauss(Jacobian, Fx);
 			dXk1 = dXk[0] + x1;
 			dXk2 = dXk[1] + x2;
@@ -136,12 +138,10 @@ double* methodGauss(double mA[n][n], double cB[n]) {
 	cout << endl;
 	return X;
 }
-void solutionM(double& x1, double& x2, double epsilon1, double epsilon2,  double M) {
+void solutionM(double x1, double x2, double M,double e1, double e2, int NIT) {
 	int k = 1;
 	cout << "k" << setw(12) << "l1" << setw(14) << "l2" << setw(16) << "x1" << setw(14) << "x2" << setw(14) << "M" << endl;
 	cout << "------------------------------------------------------------------" << endl;
-
-	
 	double* dXk = new double[n];
 	double dXk1 = 0, dXk2 = 0;
 	double l1 = 1, l2 = 1, l1_2 = 0, l2_2 = 0;
@@ -149,16 +149,16 @@ void solutionM(double& x1, double& x2, double epsilon1, double epsilon2,  double
 
 	try {
 		while (l1 > e1 || l2 > e2) {
-			double Fx[] = { -func1(x1,x2), -func2(x1,x2) };
+			double Fx[] = { -f1(x1,x2), -f2(x1,x2) };
 			double Jacobian[n][n] = {
-				{(func1(x1 + M * x1, x2) - func1(x1, x2)) / (M * x1), (func1(x1, x2 + M * x2) - func1(x1, x2)) / (M * x2)},
-				{(func2(x1 + M * x1, x2) - func2(x1, x2)) / (M * x1), (func2(x1, x2 + M * x2) - func2(x1, x2)) / (M * x2)}
+				{(f1(x1 + M * x1, x2) - f1(x1, x2)) / (M * x1), (f1(x1, x2 + M * x2) - f1(x1, x2)) / (M * x2)},
+				{(f2(x1 + M * x1, x2) - f2(x1, x2)) / (M * x1), (f2(x1, x2 + M * x2) - f2(x1, x2)) / (M * x2)}
 			};
 			dXk = methodGauss(Jacobian, Fx);
 			dXk1 = dXk[0] + x1;
 			dXk2 = dXk[1] + x2;
-			l1 = abs(func1(x1, x2));
-			l1_2 = abs(func2(x1, x2));
+			l1 = abs(f1(x1, x2));
+			l1_2 = abs(f2(x1, x2));
 			if (l1_2 > l1) {
 				l1 = l1_2;
 			}
@@ -179,7 +179,6 @@ void solutionM(double& x1, double& x2, double epsilon1, double epsilon2,  double
 				throw 1;
 			}
 			if (l1 <= e1 && l2 <= e2) {
-				cout << "solution!!!" << endl;
 				break;
 			}
 		}

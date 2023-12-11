@@ -10,5 +10,6 @@ double df2_dx1(double x1, double x2);
 double df2_dx2(double x1, double x2);
 void newtonMethod(double& x1, double& x2, double epsilon1, double epsilon2, int NIT);
 double* methodGauss(double mA[n][n], double cB[n]);
-void solutionM(double& x1, double& x2, double epsilon1, double epsilon2, double M)
+void solutionM(double x1, double x2, double M, double e1, double e, int NIT);
+
 #endif // NEWTON_METHOD_H
