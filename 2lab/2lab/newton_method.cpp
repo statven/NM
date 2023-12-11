@@ -49,13 +49,6 @@ void newtonMethod(double& x1, double& x2, double epsilon1, double epsilon2, int 
 					{df1_dx1(x1,x2), df1_dx2(x1,x2)},
 					{df2_dx1(x1,x2), df2_dx2(x1,x2)}
 			};
-			
-				double Jacobian[n][n] = {
-					{df1_dx1(x1,x2), df1_dx2(x1,x2)},
-					{df2_dx1(x1,x2), df2_dx2(x1,x2)}
-				};
-		
-	
 			dXk = methodGauss(Jacobian, Fx);
 			dXk1 = dXk[0] + x1;
 			dXk2 = dXk[1] + x2;
