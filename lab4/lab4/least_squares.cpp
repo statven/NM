@@ -1,58 +1,89 @@
 #include "least_squares.h"
 #include "gaussian_elimination.h"
-
 #include <iostream>
 #include <cmath>
-
+#include <iomanip>
+using namespace std;
 void performMNKApproximation(double x[6], double y[6], int m) {
-    const int M = 6;
+    const int M = 1;
     double POWERX[2 * M] = { 0 }; // Массив для хранения сумм (x_i)^k
-    double SUMX[M + 1][7] = { 0 }; // Матрица коэффициентов
+    double SUMX[M + 1][M+1] = { 0 }; // Матрица коэффициентов
     double PRAW[M + 1] = { 0 }; // Правая часть системы
-    double a[M + 1] = { 0 }; // Коэффициенты аппроксимации
+    double S2 = 0;
+    cout << "H:" << endl;
+    for (int i = 0; i < N; i++) {
+        cout << x[i] << setw(5);
+        if (i % 5 == 0 && i != 0)
+            cout << endl;
+    }
+    cout << endl;
+    cout << "mu:" << endl;
+    for (int i = 0; i < N; i++) {
+        cout << y[i] << "  ";
+        if (i % 5 == 0 && i != 0)
+            cout << endl;
+    }
+    cout << endl;
+    cout << "POWERX:" << endl;
+    for (int k = 0; k < 2 * m; k++)
+    {
+        POWERX[k] = 0;
+        for (int i = 0; i < N; i++)
+        {
+            POWERX[k] += pow(x[i], k + 1);
+        }
+        cout << POWERX[k] << " ";
+    }
+    cout << endl;
+    cout << endl;
 
     // Вычисление сумм (x_i)^k
-    for (int i = 0; i < N; i++) {
-        for (int k = 1; k <= m; k++) {
-            POWERX[k - 1] += std::pow(x[i], k);
+    for (int i = 0; i < m + 1; i++)
+        for (int j = 0; j < m + 1; j++)
+            i + j ? SUMX[i][j] = POWERX[i + j - 1] : SUMX[0][0] = N;
+
+    cout << "SUMX:" << endl;
+    for (int i = 0; i < m + 1; i++) {
+        for (int j = 0; j < m + 1; j++)
+            cout << SUMX[i][j] << " ";
+        cout << endl;
+    }
+    cout << endl;
+
+    for (int i = 0; i < m + 1; i++)
+    {
+        PRAW[i] = 0;
+        for (int j = 0; j < N; j++)
+        {
+            PRAW[i] += y[j] * pow(x[j], i);
         }
     }
 
-    // Формирование матрицы коэффициентов
-    for (int l = 1; l <= m + 1; l++) {
-        for (int j = 1; j <= m + 1; j++) {
-            SUMX[l - 1][j - 1] = POWERX[l + j - 2];
+  
+    cout << "PRAW:" << endl;
+    for (int i = 0; i < m + 1; i++)
+    {
+        cout << PRAW[i] << " ";
+    }
+    cout << endl;
+
+    double* a = methodGauss(SUMX, PRAW);
+
+    cout << "a:" << endl;
+    for (int i = 0; i < m + 1; i++) {
+        cout << a[i] << " ";
+    }
+    cout << endl;
+
+    for (int i = 0; i < N; i++)
+    {
+        double sum = y[i];
+        for (int j = 0; j < m + 1; j++)
+        {
+            sum -= a[j] * pow(x[i], j);
         }
+        S2 += pow(sum, 2);
     }
-
-    // Формирование правой части системы
-    for (int l = 1; l <= m + 1; l++) {
-        for (int i = 0; i < N; i++) {
-            PRAW[l - 1] += std::pow(x[i], l - 1) * y[i];
-        }
-    }
-
-    // Решение системы линейных уравнений методом Гаусса
-    solveGauss(SUMX, PRAW, a);
-
-    // Вычисление остаточной дисперсии
-    double S = 0.0;
-    for (int i = 0; i < N; i++) {
-        double fi_x = 0.0;
-        for (int k = 0; k <= m; k++) {
-            fi_x += a[k] * std::pow(x[i], k);
-        }
-        S += std::pow(y[i] - fi_x, 2);
-    }
-    S /= (N - m - 1);
-    double RMSE = std::sqrt(S);
-
-    // Вывод коэффициентов и среднеквадратического отклонения
-    std::cout << "Коэффициенты аппроксимации (a_0, a_1, ..., a_m):" << std::endl;
-    for (int k = 0; k <= m; k++) {
-        std::cout << "a_" << k << " = " << a[k] << std::endl;
-    }
-    std::cout << "Среднеквадратическое отклонение: " << RMSE << std::endl;
-
-   
+    S2 /= N - m - 1;
+    double sigma = sqrt(S2); 
 }
